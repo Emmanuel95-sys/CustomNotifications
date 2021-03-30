@@ -4,9 +4,12 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -16,6 +19,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import java.util.List;
 import java.util.Random;
 
 //we are going to use
@@ -81,10 +85,21 @@ public class NotificationHelper extends ContextWrapper {
     public void sendCustomNotification(String title , Class activityName){
 
         //Trying to handle notification button click
-//        int notification_id = (int) System.currentTimeMillis();
+        int notification_id = (int) System.currentTimeMillis();
         Intent buttonIntent = new Intent("buttonClickedIntent");
+        buttonIntent.putExtra("id", notification_id);
 
-//        buttonIntent.putExtra("id", notification_id);
+        //Implicit broadcasts are not allowed anymore in Android Oreo and later.
+        // An implicit broadcast is a broadcast that does not target that app specifically.
+        //Instead of just using the intent-filter action name for constructing the Intent search
+        // the package manager for the component providing the broadcast receiver like this:
+        PackageManager packageManager = getPackageManager();
+        List<ResolveInfo> infos = packageManager.queryBroadcastReceivers(buttonIntent, 0);
+        for (ResolveInfo info : infos) {
+            ComponentName cn = new ComponentName(info.activityInfo.packageName,
+                    info.activityInfo.name);
+            buttonIntent.setComponent(cn);
+        }
 
         PendingIntent p_button_intent = PendingIntent.getBroadcast(this , 0, buttonIntent,
                0);

@@ -18,7 +18,7 @@
         style="@style/TextAppearance.Compat.Notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_red_light"
+        android:background="#D3D3D3"
         android:padding="8dp"
         android:text="Estas cerca de tu destino"
         android:textAlignment="center"
@@ -36,7 +36,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="12dp"
         android:layout_marginBottom="12dp"
-        android:background="@android:color/holo_red_light"
+        android:background="#D3D3D3"
         android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>
